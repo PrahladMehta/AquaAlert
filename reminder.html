@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drink Water Reminder</title>
+    <title>AquaAlert Reminder</title>
     <link rel="stylesheet" href="reminder.css" />
   </head>
   <body>
@@ -13,30 +13,42 @@
 
       <section class="reminder-card">
         <div id="avatar-scene" class="avatar-scene thirsty">
+          <div class="sparkles" aria-hidden="true">
+            <span class="spark spark-1"></span>
+            <span class="spark spark-2"></span>
+            <span class="spark spark-3"></span>
+            <span class="spark spark-4"></span>
+            <span class="spark spark-5"></span>
+          </div>
           <div class="avatar">
             <div class="avatar-head">
-              <div class="eye eye-left"></div>
-              <div class="eye eye-right"></div>
+              <div class="eye eye-left"><span class="lid"></span></div>
+              <div class="eye eye-right"><span class="lid"></span></div>
               <div class="mouth"></div>
               <div class="cheek cheek-left"></div>
               <div class="cheek cheek-right"></div>
             </div>
             <div class="avatar-body">
-              <div class="water-fill"></div>
+              <div class="water-fill">
+                <div class="water-wave"></div>
+              </div>
               <div class="body-shine"></div>
             </div>
             <div class="arm arm-left"></div>
-            <div class="arm arm-right"></div>
+            <div class="arm arm-right">
+              <div class="bottle" aria-hidden="true"></div>
+            </div>
             <div class="leg leg-left"></div>
             <div class="leg leg-right"></div>
           </div>
         </div>
-        <p class="eyebrow">Hydration reminder</p>
-        <h1>Drink Water</h1>
-        <p class="copy">Take a short break, drink one glass of water, and tap the button after you finish it.</p>
-        <button id="confirm-btn" class="confirm-btn hidden" type="button">I Drank Water (+500 ml)</button>
-        <button id="later-btn" class="later-btn" type="button">Remind me in 15 min</button>
-        <p id="status-text" class="status-text">Preparing your check button...</p>
+
+        <p class="eyebrow"><span id="avatar-name">Aqua</span> · Hydration check</p>
+        <h1 id="headline">I'm thirsty</h1>
+        <p id="copy" class="copy">Take a short break and drink one glass of water with me.</p>
+        <button id="confirm-btn" class="confirm-btn hidden" type="button">I Drank Water</button>
+        <button id="later-btn" class="later-btn" type="button">Not right now</button>
+        <p id="status-text" class="status-text">Getting ready...</p>
       </section>
     </main>
 

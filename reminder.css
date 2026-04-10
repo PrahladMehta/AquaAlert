@@ -45,6 +45,7 @@ body {
   height: 180px;
   left: -32px;
   bottom: 40px;
+  animation: floatBubble 7s ease-in-out infinite;
 }
 
 .bubble-right {
@@ -52,6 +53,7 @@ body {
   height: 130px;
   right: -18px;
   top: 44px;
+  animation: floatBubble 9s ease-in-out infinite reverse;
 }
 
 .reminder-card {
@@ -64,19 +66,21 @@ body {
   text-align: center;
   box-shadow: 0 25px 55px rgba(19, 89, 131, 0.16);
   backdrop-filter: blur(14px);
+  position: relative;
 }
 
 .avatar-scene {
   display: grid;
   place-items: center;
   margin-bottom: 18px;
+  position: relative;
 }
 
 .avatar {
   position: relative;
   width: 152px;
-  height: 190px;
-  animation: idleBob 2.4s ease-in-out infinite;
+  height: 200px;
+  animation: idleBreath 3.4s ease-in-out infinite;
 }
 
 .avatar-head {
@@ -89,6 +93,7 @@ body {
   border-radius: 46px;
   border: 3px solid rgba(23, 50, 78, 0.08);
   box-shadow: 0 8px 14px rgba(18, 96, 141, 0.08);
+  overflow: hidden;
 }
 
 .avatar-body {
@@ -111,18 +116,18 @@ body {
   width: 100%;
   height: 24%;
   background: linear-gradient(180deg, #7ad9ff 0%, #1294d0 100%);
-  transition: height 0.45s ease, background 0.45s ease;
+  transition: height 0.7s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease;
 }
 
-.water-fill::before {
-  content: "";
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.28);
+.water-wave {
+  position: absolute;
+  top: -8px;
+  left: -25%;
+  width: 150%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.42);
   border-radius: 50%;
-  transform: translateY(-6px);
+  animation: waveSlosh 2.6s ease-in-out infinite;
 }
 
 .body-shine {
@@ -143,11 +148,27 @@ body {
 
 .eye {
   top: 26px;
-  width: 10px;
+  width: 12px;
   height: 16px;
   background: var(--text);
   border-radius: 50%;
+  overflow: hidden;
   transition: transform 0.3s ease, height 0.3s ease;
+}
+
+.eye .lid {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #f8fcff 0%, #dcefff 100%);
+  transform: translateY(-100%);
+}
+
+.avatar-scene .eye .lid {
+  animation: blink 5.2s ease-in-out infinite;
+}
+
+.eye-right .lid {
+  animation-delay: 0.12s;
 }
 
 .eye-left {
@@ -166,7 +187,7 @@ body {
   border-bottom: 4px solid var(--text);
   border-radius: 0 0 20px 20px;
   transform: translateX(-50%);
-  transition: all 0.3s ease;
+  transition: all 0.35s ease;
 }
 
 .cheek {
@@ -175,6 +196,7 @@ body {
   height: 8px;
   background: rgba(255, 153, 153, 0.22);
   border-radius: 999px;
+  transition: background 0.4s ease, transform 0.4s ease;
 }
 
 .cheek-left {
@@ -191,7 +213,7 @@ body {
   background: linear-gradient(180deg, #89dcff 0%, #1294d0 100%);
   border-radius: 999px;
   transform-origin: top center;
-  transition: transform 0.4s ease;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .arm {
@@ -208,6 +230,32 @@ body {
 .arm-right {
   right: 8px;
   transform: rotate(-18deg);
+  position: absolute;
+}
+
+.bottle {
+  position: absolute;
+  top: -22px;
+  left: -8px;
+  width: 26px;
+  height: 38px;
+  background: linear-gradient(180deg, #b9ecff 0%, #5fc4ee 100%);
+  border-radius: 6px 6px 12px 12px;
+  border: 2px solid rgba(23, 50, 78, 0.18);
+  opacity: 0;
+  transform: translateY(10px) rotate(15deg);
+  transition: opacity 0.3s ease, transform 0.4s ease;
+}
+
+.bottle::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 7px;
+  width: 8px;
+  height: 6px;
+  background: #2a5e7a;
+  border-radius: 2px;
 }
 
 .leg {
@@ -224,52 +272,106 @@ body {
   right: 44px;
 }
 
+/* Thirsty state */
 .avatar-scene.thirsty .avatar {
-  filter: saturate(0.86);
+  filter: saturate(0.8);
+  animation: idleSlump 4.2s ease-in-out infinite;
 }
 
 .avatar-scene.thirsty .water-fill {
-  height: 18%;
-  background: linear-gradient(180deg, #9ee7ff 0%, #65c8ef 100%);
+  height: 16%;
+  background: linear-gradient(180deg, #b6e2f3 0%, #7ec0d8 100%);
 }
 
 .avatar-scene.thirsty .mouth {
   border-bottom: 0;
   border-top: 4px solid var(--text);
   border-radius: 20px 20px 0 0;
-  bottom: 14px;
+  bottom: 12px;
+  width: 18px;
+}
+
+.avatar-scene.thirsty .cheek {
+  background: rgba(180, 160, 140, 0.25);
 }
 
 .avatar-scene.thirsty .arm-left {
-  transform: rotate(42deg);
+  transform: rotate(38deg);
 }
 
 .avatar-scene.thirsty .arm-right {
-  transform: rotate(-42deg);
+  transform: rotate(-38deg);
 }
 
+.avatar-scene.thirsty .eye {
+  height: 8px;
+  transform: scaleY(0.7);
+}
+
+/* Sipping state */
+.avatar-scene.sipping .avatar {
+  animation: sipBob 0.5s ease-in-out 3;
+}
+
+.avatar-scene.sipping .arm-right {
+  transform: rotate(-118deg) translateY(-6px);
+}
+
+.avatar-scene.sipping .bottle {
+  opacity: 1;
+  transform: translateY(-2px) rotate(-15deg);
+}
+
+.avatar-scene.sipping .mouth {
+  width: 14px;
+  height: 14px;
+  border: 4px solid var(--text);
+  border-radius: 50%;
+  bottom: 14px;
+}
+
+.avatar-scene.sipping .water-fill {
+  height: 42%;
+  background: linear-gradient(180deg, #92dcf6 0%, #1294d0 100%);
+}
+
+.avatar-scene.sipping .eye {
+  height: 6px;
+  transform: scaleY(0.5);
+}
+
+/* Hydrated state */
 .avatar-scene.hydrated .avatar {
-  animation: celebrateBounce 0.7s ease 2, idleBob 2.2s ease-in-out infinite 1.4s;
+  filter: saturate(1.1);
+  animation: celebrateBounce 0.7s ease 2, idleBreath 3s ease-in-out infinite 1.4s;
 }
 
 .avatar-scene.hydrated .water-fill {
-  height: 72%;
+  height: 78%;
+  background: linear-gradient(180deg, #7ad9ff 0%, #0d83bd 100%);
 }
 
 .avatar-scene.hydrated .mouth {
   border-top: 0;
   border-bottom: 4px solid var(--text);
   border-radius: 0 0 20px 20px;
-  bottom: 15px;
+  bottom: 14px;
+  width: 28px;
+  height: 14px;
 }
 
 .avatar-scene.hydrated .eye {
   height: 14px;
-  transform: scaleY(0.9);
+  transform: scaleY(0.95);
+}
+
+.avatar-scene.hydrated .cheek {
+  background: rgba(255, 130, 140, 0.45);
+  transform: scale(1.15);
 }
 
 .avatar-scene.hydrated .arm-left {
-  transform: rotate(-28deg);
+  transform: rotate(-32deg);
 }
 
 .avatar-scene.hydrated .arm-right {
@@ -277,12 +379,43 @@ body {
 }
 
 .avatar-scene.hydrated .leg-left {
-  transform: rotate(12deg);
+  transform: rotate(10deg);
 }
 
 .avatar-scene.hydrated .leg-right {
-  transform: rotate(-12deg);
+  transform: rotate(-10deg);
 }
+
+/* Sparkles */
+.sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spark {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #fff 0%, #b9ecff 60%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.spark-1 { top: 10%; left: 18%; }
+.spark-2 { top: 22%; right: 14%; }
+.spark-3 { top: 50%; left: 8%; }
+.spark-4 { top: 60%; right: 6%; }
+.spark-5 { top: 4%; left: 52%; }
+
+.avatar-scene.hydrated .spark {
+  animation: sparkle 1.4s ease-out 2;
+}
+
+.avatar-scene.hydrated .spark-2 { animation-delay: 0.1s; }
+.avatar-scene.hydrated .spark-3 { animation-delay: 0.2s; }
+.avatar-scene.hydrated .spark-4 { animation-delay: 0.3s; }
+.avatar-scene.hydrated .spark-5 { animation-delay: 0.05s; }
 
 .eyebrow {
   text-transform: uppercase;
@@ -294,7 +427,8 @@ body {
 
 h1 {
   margin: 0;
-  font-size: 34px;
+  font-size: 30px;
+  transition: color 0.4s ease;
 }
 
 .copy,
@@ -305,6 +439,7 @@ h1 {
 
 .copy {
   margin: 10px 0 18px;
+  min-height: 42px;
 }
 
 .confirm-btn,
@@ -315,12 +450,19 @@ h1 {
   padding: 14px 16px;
   font-weight: 700;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .confirm-btn {
   background: linear-gradient(135deg, var(--blue), var(--blue-deep));
   color: white;
   box-shadow: 0 14px 24px rgba(16, 152, 212, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 30px rgba(16, 152, 212, 0.34);
 }
 
 .later-btn {
@@ -336,27 +478,47 @@ h1 {
 .status-text {
   margin: 12px 0 0;
   font-size: 13px;
+  min-height: 18px;
 }
 
-@keyframes idleBob {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(8px) scale(1.02);
-  }
+@keyframes idleBreath {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+}
+
+@keyframes idleSlump {
+  0%, 100% { transform: translateY(2px) scale(0.99); }
+  50% { transform: translateY(6px) scale(0.985); }
+}
+
+@keyframes sipBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
 @keyframes celebrateBounce {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  35% {
-    transform: translateY(-12px) scale(1.03);
-  }
-  70% {
-    transform: translateY(4px) scale(0.98);
-  }
+  0%, 100% { transform: translateY(0) scale(1); }
+  35% { transform: translateY(-14px) scale(1.04); }
+  70% { transform: translateY(4px) scale(0.98); }
+}
+
+@keyframes blink {
+  0%, 92%, 100% { transform: translateY(-100%); }
+  95%, 97% { transform: translateY(0); }
+}
+
+@keyframes waveSlosh {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(8%) translateY(-2px); }
+}
+
+@keyframes sparkle {
+  0% { opacity: 0; transform: scale(0.4); }
+  40% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(0.6) translateY(-12px); }
+}
+
+@keyframes floatBubble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }

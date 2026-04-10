@@ -1,5 +1,6 @@
 import {
   clearReminderWindowId,
+  getEffectiveIntervalMinutes,
   getStoredData,
   setReminderWindowId
 } from "./storage.js";
@@ -9,7 +10,7 @@ const SNOOZE_ALARM_NAME = "drink-water-reminder-snooze";
 
 async function scheduleReminderAlarm() {
   const data = await getStoredData();
-  const delayMinutes = Math.max(1, data.settings.reminderHours * 60);
+  const delayMinutes = getEffectiveIntervalMinutes(data.settings);
 
   await chrome.alarms.clear(ALARM_NAME);
   await chrome.alarms.clear(SNOOZE_ALARM_NAME);
@@ -36,13 +37,22 @@ async function openReminderWindow() {
     url,
     type: "popup",
     width: 420,
-    height: 540,
+    height: 600,
     focused: true
   });
 
   if (typeof windowInfo.id === "number") {
     await setReminderWindowId(windowInfo.id);
   }
+}
+
+function settingsAffectSchedule(prev, next) {
+  if (!prev || !next) return true;
+  return (
+    prev.reminderMinutes !== next.reminderMinutes ||
+    prev.testingMode !== next.testingMode ||
+    prev.testingIntervalMinutes !== next.testingIntervalMinutes
+  );
 }
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -63,5 +73,14 @@ chrome.windows.onRemoved.addListener(async (windowId) => {
   const data = await getStoredData();
   if (data.reminderWindowId === windowId) {
     await clearReminderWindowId();
+  }
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "local" || !changes.drinkWaterData) return;
+  const prev = changes.drinkWaterData.oldValue?.settings;
+  const next = changes.drinkWaterData.newValue?.settings;
+  if (settingsAffectSchedule(prev, next)) {
+    scheduleReminderAlarm();
   }
 });

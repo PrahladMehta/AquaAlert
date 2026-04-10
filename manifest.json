@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Drink Water Reminder",
-  "description": "Reminds you to drink water every 2 hours and tracks your daily, weekly, and monthly intake.",
-  "version": "1.0.0",
+  "name": "AquaAlert",
+  "description": "A friendly hydration buddy that reminds you to drink water and tracks your daily, weekly, and monthly intake.",
+  "version": "1.1.0",
   "permissions": [
     "alarms",
     "storage",
@@ -13,7 +13,11 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Drink Water Reminder",
+    "default_title": "AquaAlert",
     "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   }
 }
