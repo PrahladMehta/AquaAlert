@@ -3,6 +3,7 @@ import { addDrinkEntry, clearReminderWindowId, getStoredData } from "./storage.j
 const confirmBtnEl = document.getElementById("confirm-btn");
 const laterBtnEl = document.getElementById("later-btn");
 const statusTextEl = document.getElementById("status-text");
+const avatarSceneEl = document.getElementById("avatar-scene");
 
 async function initializeReminder() {
   const data = await getStoredData();
@@ -17,6 +18,8 @@ window.setTimeout(() => {
 confirmBtnEl.addEventListener("click", async () => {
   const data = await getStoredData();
   await addDrinkEntry(data.settings.drinkAmountMl);
+  avatarSceneEl.classList.remove("thirsty");
+  avatarSceneEl.classList.add("hydrated");
   statusTextEl.textContent = "Nice work. Your water log has been updated.";
 
   const currentWindow = await chrome.windows.getCurrent();
