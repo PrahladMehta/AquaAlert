@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drink Water Reminder</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">Hydration Today</p>
+          <h1>Drink Water</h1>
+          <p class="subtext">Stay consistent and build a healthy routine.</p>
+        </div>
+        <button id="quick-log-btn" class="primary-btn" type="button">I Drank Water</button>
+      </section>
+
+      <section class="progress-card">
+        <div class="progress-head progress-head-simple">
+          <div>
+            <p class="label">Today's total</p>
+            <strong id="today-total">0 ml</strong>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <p id="goal-text" class="progress-copy">0% of daily goal</p>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card">
+          <p class="label">This week</p>
+          <strong id="week-total">0 ml</strong>
+          <span id="week-average">Avg 0 ml/day</span>
+        </article>
+        <article class="stat-card">
+          <p class="label">This month</p>
+          <strong id="month-total">0 ml</strong>
+          <span id="month-average">Avg 0 ml/day</span>
+        </article>
+      </section>
+
+      <section class="chart-card">
+        <div class="section-head">
+          <h2>Last 7 days</h2>
+        </div>
+        <div id="week-chart" class="bars"></div>
+      </section>
+
+      <section class="chart-card">
+        <div class="section-head">
+          <h2>Recent history</h2>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
