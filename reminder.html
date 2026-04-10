@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drink Water Reminder</title>
+    <link rel="stylesheet" href="reminder.css" />
+  </head>
+  <body>
+    <main class="reminder-shell">
+      <div class="bubble bubble-left"></div>
+      <div class="bubble bubble-right"></div>
+
+      <section class="reminder-card">
+        <div class="drop-wrap">
+          <div class="water-drop"></div>
+        </div>
+        <p class="eyebrow">Hydration reminder</p>
+        <h1>Drink Water</h1>
+        <p class="copy">Take a short break, drink one glass of water, and tap the button after you finish it.</p>
+        <button id="confirm-btn" class="confirm-btn hidden" type="button">I Drank Water (+500 ml)</button>
+        <button id="later-btn" class="later-btn" type="button">Remind me in 15 min</button>
+        <p id="status-text" class="status-text">Preparing your check button...</p>
+      </section>
+    </main>
+
+    <script type="module" src="reminder.js"></script>
+  </body>
+</html>
