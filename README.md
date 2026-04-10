@@ -15,7 +15,7 @@ Chrome extension that:
 2. Go to `chrome://extensions/`.
 3. Turn on Developer mode.
 4. Click `Load unpacked`.
-5. Select this folder: `C:\Users\Prahlad\Projects\drink-water`
+5. Select the project folder that contains this extension.
 
 ## Use
 
@@ -23,4 +23,4 @@ Chrome extension that:
 - Every minute, a reminder window opens while testing.
 - Click `I Drank Water` to add 500 ml.
 - Click the extension icon to open the dashboard.
-- Water can only be logged from the popup button or the reminder window.
+- Water can only be logged through the `I Drank Water` button in the popup or reminder window.
