@@ -33,6 +33,7 @@ function readFormSettings() {
     if (field.type === "checkbox") {
       next[field.id] = el.checked;
     } else if (field.type === "number") {
+      if (el.value.trim() === "") continue;
       const value = Number(el.value);
       if (!Number.isFinite(value)) continue;
       next[field.id] = value;

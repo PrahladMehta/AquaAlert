@@ -10,6 +10,59 @@ const DEFAULT_SETTINGS = {
   onboarded: false
 };
 
+const SETTINGS_LIMITS = {
+  dailyGoalMl: { min: 500, max: 6000 },
+  drinkAmountMl: { min: 50, max: 1000 },
+  reminderMinutes: { min: 1, max: 600 },
+  testingIntervalMinutes: { min: 1, max: 60 }
+};
+
+function clampNumber(value, fallback, min, max) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(num)));
+}
+
+function sanitizeSettings(rawSettings = {}) {
+  const merged = {
+    ...DEFAULT_SETTINGS,
+    ...rawSettings
+  };
+
+  return {
+    dailyGoalMl: clampNumber(
+      merged.dailyGoalMl,
+      DEFAULT_SETTINGS.dailyGoalMl,
+      SETTINGS_LIMITS.dailyGoalMl.min,
+      SETTINGS_LIMITS.dailyGoalMl.max
+    ),
+    drinkAmountMl: clampNumber(
+      merged.drinkAmountMl,
+      DEFAULT_SETTINGS.drinkAmountMl,
+      SETTINGS_LIMITS.drinkAmountMl.min,
+      SETTINGS_LIMITS.drinkAmountMl.max
+    ),
+    reminderMinutes: clampNumber(
+      merged.reminderMinutes,
+      DEFAULT_SETTINGS.reminderMinutes,
+      SETTINGS_LIMITS.reminderMinutes.min,
+      SETTINGS_LIMITS.reminderMinutes.max
+    ),
+    testingMode: Boolean(merged.testingMode),
+    testingIntervalMinutes: clampNumber(
+      merged.testingIntervalMinutes,
+      DEFAULT_SETTINGS.testingIntervalMinutes,
+      SETTINGS_LIMITS.testingIntervalMinutes.min,
+      SETTINGS_LIMITS.testingIntervalMinutes.max
+    ),
+    avatarName:
+      typeof merged.avatarName === "string" && merged.avatarName.trim()
+        ? merged.avatarName.trim().slice(0, 20)
+        : DEFAULT_SETTINGS.avatarName,
+    onboarded: Boolean(merged.onboarded)
+  };
+}
+
 function formatDateKey(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -46,10 +99,7 @@ async function getStoredData() {
   const data = stored[STORAGE_KEY] || {};
 
   return {
-    settings: {
-      ...DEFAULT_SETTINGS,
-      ...migrateSettings(data.settings || {})
-    },
+    settings: sanitizeSettings(migrateSettings(data.settings || {})),
     entries: Array.isArray(data.entries) ? data.entries : [],
     skips: Array.isArray(data.skips) ? data.skips : [],
     reminderWindowId: typeof data.reminderWindowId === "number" ? data.reminderWindowId : null
@@ -102,10 +152,10 @@ async function updateSettings(partialSettings) {
   const data = await getStoredData();
   const updated = {
     ...data,
-    settings: {
+    settings: sanitizeSettings({
       ...data.settings,
       ...partialSettings
-    }
+    })
   };
 
   await saveStoredData(updated);
