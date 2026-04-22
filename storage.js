@@ -112,17 +112,26 @@ async function saveStoredData(data) {
   });
 }
 
+const MAX_ENTRIES = 2000;
+
 async function addDrinkEntry(amountMl) {
+  const sanitizedAmount = clampNumber(
+    amountMl,
+    DEFAULT_SETTINGS.drinkAmountMl,
+    SETTINGS_LIMITS.drinkAmountMl.min,
+    SETTINGS_LIMITS.drinkAmountMl.max
+  );
+
   const data = await getStoredData();
   const entry = {
     id: crypto.randomUUID(),
-    amountMl,
+    amountMl: sanitizedAmount,
     timestamp: new Date().toISOString()
   };
 
-  const entries = [...data.entries, entry].sort((a, b) =>
-    a.timestamp.localeCompare(b.timestamp)
-  );
+  const entries = [...data.entries, entry]
+    .sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+    .slice(-MAX_ENTRIES);
 
   const updated = {
     ...data,
@@ -188,8 +197,14 @@ function getEffectiveIntervalMinutes(settings) {
 function getTotalForDate(entries, date) {
   const key = formatDateKey(date);
   return entries
-    .filter((entry) => formatDateKey(new Date(entry.timestamp)) === key)
-    .reduce((sum, entry) => sum + entry.amountMl, 0);
+    .filter((entry) => {
+      const ts = new Date(entry.timestamp);
+      return !Number.isNaN(ts.getTime()) && formatDateKey(ts) === key;
+    })
+    .reduce((sum, entry) => {
+      const amount = Number(entry.amountMl);
+      return sum + (Number.isFinite(amount) ? amount : 0);
+    }, 0);
 }
 
 function summarizeRange(entries, dates, goalMl) {
